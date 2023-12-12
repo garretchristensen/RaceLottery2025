@@ -102,9 +102,7 @@ ui<-fluidPage(
   htmltools::includeMarkdown("./markdown/implementingthelottery.md"),
   # Copy the line below to make a number input box into the UI.
   fluidRow(
-  column(6, numericInput("num", label = h1("Enter the seed"), value = NA))
-  ),
-  fluidRow(
+  column(6, numericInput("num", label = h1("Enter the seed"), value = NA)),
   column(6, numericInput("num2", label = h1("Confirm the seed"), value = NA))
   ),
   fluidRow(downloadButton("report", "Download Results")),
