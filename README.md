@@ -13,4 +13,4 @@ Note that if you clone this repo, you can run the code on your own machine and g
 
 Questions, comments, pull requests welcome!
 
-(Implemented in R 4.2.2 and RStudio 2022.12.0 Build 353)
+(Implemented in R 4.3.2 and RStudio 2023.09.1 Build 494)
