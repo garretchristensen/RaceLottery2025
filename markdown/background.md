@@ -1,5 +1,5 @@
-
 ## Lottery Design
+
 The 2024 lottery is picking 63 men, 68 women, a 75-men waitlist, and a 75-women waitlist from the 546 total applicants (152 women, 394 men). 
 
 The general goals of the lottery are as follows:
@@ -29,6 +29,6 @@ Tickets=2^(n+k+1)+2ln(v+t+1) where n, k, v, and t are defined as follows:
 
 * Weighted_Finishes = K = How many times have you finished High Lonesome 100? We will award previous finishers a boost until they have finished High Lonesome three times; then the boost decreases. (We love returning runners, but after a while, it’s cool to give others a chance.) K is defined according to the following rule: k = 0 if you have 0 finishes, k = 0.5 if you have 1 finish, k = 1 if you have 2 finishes, k = 1.5 if you have 3 finishes, and k = 0.5 if you have 4 or more finishes.				
 
-* Volunteer_Points = V = How many volunteer tickets did you receive at the previous (ie the 2022) running of the High Lonesome, West Line Winder, and/or Sawatch Ascent? V is the number of tickets for your approved volunteer shifts. Approved shifts means that you volunteered in an official capacity at a sanctioned Freestone Endurance task…think aid stations, course marking, etc. Things this doesn’t include is trail work, pacing your friend, helping out for a bit at an aid station while you were waiting for a runner, or other informal means. The maximum amount that can be claimed is 30.				
+* Volunteer_Points = V = How many volunteer tickets did you receive at the previous (i.e. the 2023) running of the High Lonesome, West Line Winder, and/or Sawatch Ascent? V is the number of tickets for your approved volunteer shifts. Approved shifts means that you volunteered in an official capacity at a sanctioned Freestone Endurance task…think aid stations, course marking, etc. Things this doesn’t include is trail work, pacing your friend, helping out for a bit at an aid station while you were waiting for a runner, or other informal means. The maximum amount that can be claimed is 30.				
 
-* Extra_Trailwork = T = Between 1/1/2022 and 12/31/2022, how many EXTRA hours of trail work did you do? Your total number of hours is divided by 8 (a standard trail work shift). You may not use any hours that you've already used for some other race credit (that includes work done for the High Lonesome 100) or for which you were paid. You must also provide a trail work form for all the hours you are claiming. The maximum amount that can be claimed is 10.	
+* Extra_Trailwork = T = Between 1/1/2023 and 12/31/2023, how many EXTRA hours of trail work did you do? Your total number of hours is divided by 8 (a standard trail work shift). You may not use any hours that you've already used for some other race credit (that includes work done for the High Lonesome 100) or for which you were paid. You must also provide a trail work form for all the hours you are claiming. The maximum amount that can be claimed is 10.	
