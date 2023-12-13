@@ -1,49 +1,11 @@
 ---
 title: "High Lonesome 2024 Lottery"
 author: "Garret Christensen"
-date: "January 5, 2024"
 output: html_document
+date: "2023-12-12"
 runtime: shiny
 ---
-## Background
-
-Welcome to the High Lonesome 2024 Lottery. This lottery is run with code written by ultra-marathoner/economist/nerd [Garret Christensen](http://garrettheonion.blogspot.com). The code is available on GitHub [here](http://www.github.com/garretchristensen/RaceLottery2024). The intent with using Github is to make the entire process transparent and reproducible. If you speak R, or want to help me improve the graphical interface, please check it out!
-
-## Lottery Design Choices
-The 2024 lottery is picking 63 men, 68 women, a 75-men waitlist, and a 75-women waitlist from the 546 total applicants (152 women, 394 men). 
-
-The general goals of the lottery are as follows:
-
-* We want equal numbers of men and women
-* We'd like to get a mix of new and veteran runners, without guaranteeing entry for either
-* Previous unsuccessful applications should be the major determinant of selection
-* We value volunteering and trail work
-* We'd like new entrants to have a decent chance to run within a couple-few years
-
-So here are the activities for which we will award points:
-
-* Volunteer shifts at High Lonesome or other Freestone Endurance events
-* Extra volunteer trailwork *beyond* the eight hours required
-* Previous applications for the race
-* Previous finishes of the race
-
-
-### Chosen Model
-
-Statistically, getting equal numbers of men and women is easy---just divide the race cap in half and draw separately. The number of slots drawn in 2024 is slightly different because of volunteer slots, sponsor slots etc. (See the [race website](https://www.highlonesome100.com/general-registration-info) for a complete listing). The rest is a bit more complicated, but we've chosen the following weighting method: 
-
-Tickets=2^(n+k+1)+2ln(v+t+1) where n, k, v, and t are defined as follows:
-
-* Previous_Applications = N = Since you were last picked in the lottery or offered entry off the waitlist, how many times have you entered the High Lonesome lottery, NOT including this year? Note that previous lottery entries do NOT need be in successive years. The value of N resets to zero after you are picked in the lottery, are offered a slot via the waitlist, or fail to apply for three years. N is equal to your previous unsuccessful applications, as defined above, with no maximum.					
-
-
-* Weighted_Finishes = K = How many times have you finished High Lonesome 100? We will award previous finishers a boost until they have finished High Lonesome three times; then the boost decreases. (We love returning runners, but after a while, it’s cool to give others a chance.) K is defined according to the following rule: k = 0 if you have 0 finishes, k = 0.5 if you have 1 finish, k = 1 if you have 2 finishes, k = 1.5 if you have 3 finishes, and k = 0.5 if you have 4 or more finishes.				
-
-* Volunteer_Points = V = How many volunteer tickets did you receive at the previous (ie the 2022) running of the High Lonesome, West Line Winder, and/or Sawatch Ascent? V is the number of tickets for your approved volunteer shifts. Approved shifts means that you volunteered in an official capacity at a sanctioned Freestone Endurance task…think aid stations, course marking, etc. Things this doesn’t include is trail work, pacing your friend, helping out for a bit at an aid station while you were waiting for a runner, or other informal means. The maximum amount that can be claimed is 30.				
-
-* Extra_Trailwork = T = Between 1/1/2022 and 12/31/2022, how many EXTRA hours of trail work did you do? Your total number of hours is divided by 8 (a standard trail work shift). You may not use any hours that you've already used for some other race credit (that includes work done for the High Lonesome 100) or for which you were paid. You must also provide a trail work form for all the hours you are claiming. The maximum amount that can be claimed is 10.					
-
-
+Welcome to the High Lonesome 2024 Lottery. This lottery is run with code written by ultra-marathoner/economist/nerd [Garret Christensen](http://garrettheonion.blogspot.com). The code is available on GitHub [here](http://www.github.com/garretchristensen/RaceLottery2024). The intent with using Github is to make the entire process transparent and reproducible. If you speak R, or want to help me improve the graphical interface, please check it out!		
 
 
 ```{r prep, echo=FALSE, results=FALSE, warning=FALSE, message=FALSE}
@@ -52,12 +14,7 @@ library(tibble)
 library(readxl)
 library(markdown)
 library(shiny)
-
-#####################################################
-#SET EVERYTHING UP BEFORE DOING THE SHINY PART
-#######################################################
-
-#I COULD MAKE THIS AN INTERACTIVE PART TOO LATER
+library(shinyBS)
 
 temp<-read.csv("./2024 HiLo lottery data_FINALnoemail.csv", stringsAsFactors = FALSE) #LOAD THE DATA
 df<-as_tibble(temp)
@@ -75,57 +32,53 @@ head(df)
 #NUMBER OF MEN AND WOMEN APPLICANTS
 n_men_app=nrow(men<-df[which(df$Gender=="M"),])
 n_women_app=nrow(women<-df[which(df$Gender=="F"),])
-
 ```
 
+```{r main, echo=FALSE, results=TRUE, warning=FALSE, message=FALSE}
 
+women <- data.frame( id = c(1, 2, 3, 4), firstname = c("Joan", "Robin",  "Anne", "Mary"), lastname = c("Jett", "Reynolds", "Adams", "Martin")) 
 
-
-
-```{r runlottery, echo=FALSE, warning=FALSE}
 shinyApp(
-  
-#######################################################################
-# WHAT THE UI LOOKS LIKE
-#######################################################################
-ui<-fluidPage(
-  htmltools::includeMarkdown("./markdown/justtellmetheodds.md"),
-  fluidRow(
+  ui<-fluidPage(
+    
+    
+    
+bsCollapse(id = "collapse", open = "Lottery Background",
+  bsCollapsePanel("Lottery Background", "",
+                   "",
+                   fluidRow(htmltools::includeMarkdown("./markdown/background.md")), style = "info"),
+  bsCollapsePanel("What are my odds?", "",
+                   "",  fluidRow(
+                  htmltools::includeMarkdown("./markdown/justtellmetheodds.md"),
   column(6, sliderInput("apps", label = h5("Previous applications"), min=0, max=5, value = 0)),
   column(6, sliderInput("finishes", label = h5("Previous Finishes"), min=0, max=5, value = 0)),
   column(6, sliderInput("volunteer", label = h5("Volunteer Shifts"), min=0, max=30, value = 0)),
-  column(6, sliderInput("trailwork", label = h5("Extra Trailwork"), min=0, max=10, value = 0))
-  ),
+  column(6, sliderInput("trailwork", label = h5("Extra Trailwork"), min=0, max=10, value = 0)),
+  fluidRow("Your tickets in the lottery:", textOutput("tickets"))
+  ), style = "success"),
   
-  fluidRow("Your tickets in the lottery:", textOutput("tickets")),
-  
-  htmltools::includeMarkdown("./markdown/implementingthelottery.md"),
-  # Copy the line below to make a number input box into the UI.
+  bsCollapsePanel("Set the Seed", 
   fluidRow(
+  htmltools::includeMarkdown("./markdown/implementingthelottery.md"),  
   column(6, numericInput("num", label = h1("Enter the seed"), value = NA)),
   column(6, numericInput("num2", label = h1("Confirm the seed"), value = NA))
-  ),
-  fluidRow(downloadButton("report", "Download Results")),
+  ),style="info" )
+),    
   
-  #fluidRow(
-  #column(6, numericInput("w_defer", label = h1("Number of female deferrals/legacy runners"), value = 0)),
-  #column(6, numericInput("m_defer", label = h1("Number of male deferrals/legacy runners"), value = 5)) 
-  #),             
-  
+ 
   fluidRow(verbatimTextOutput("value")),
-  #what do I have to do to get this printed above the data tables?
   fluidRow("These are the women selected in the lottery:", tableOutput("women")),
-  #and something inbetween them would be nice.
   fluidRow("These are the men selected in the lottery:", tableOutput("men")),
   
   htmltools::includeMarkdown("./markdown/herearethewaitlists.md"),
-  fluidRow("These are the waitlists. Women first, then men:", tableOutput("combo"))
- ),
+  fluidRow("These are the waitlists. Women first, then men:", tableOutput("combo")),
+  fluidRow(downloadButton("report", "Download Results")) 
 
-#############################################################################
-server<- function(input, output) {
 
-  output$tickets <- renderText({
+  ), 
+  server<- function(input, output) {
+    
+    output$tickets <- renderText({
 #Do THE VARIABLE TRANSFORMATIONS FOR PEOPLE's ENTERED VALUES
 k_sim <- ifelse(input$finishes==0 , 0,
                ifelse(input$finishes==1,  0.5,
@@ -141,24 +94,35 @@ t_sim<-pmin(input$trailwork, 10)
 #Tickets=2^(n+k+1)+2ln(v+t+1) where n, k, v, and t are defined as follows:
 2^(k_sim+input$apps+1) + 2*log(v_sim+t_sim+1)
 
-})
-  
-  
-output$value <- renderPrint({
-
-set.seed(input$num) #SET THE SEED WITH DICE!
-nm<-input$Nm #SET THE TOTAL NUMBER TO PICK
-nw<-input$Nw #SET THE TOTAL NUMBER TO PICK
+}) #END RENDER TEXT
+    
+    
+    
+    
+    
+    winners <- reactive({
+      req(input$num, input$num2)
+      
+      if (input$num == input$num2) {
+        #sample_n(women, 3, replace = FALSE)
+        
+        
+        
+        
+        
+        set.seed(input$num) #SET THE SEED WITH DICE!
+        nm<-input$Nm #SET THE TOTAL NUMBER TO PICK
+        nw<-input$Nw #SET THE TOTAL NUMBER TO PICK
 
 ######################################################################
-#FOR 2022 JUST SET HOW MANY TO PICK
-n_women_pick <- 68
-n_men_pick <- 63
+#FOR 2024 JUST SET HOW MANY TO PICK
+        n_women_pick <- 68
+        n_men_pick <- 63
       
 ######################################################################
 #DETERMINE TICKETS FROM THE DATA
 #For 2020 nobody has unsuccessful applications, this is the first lottery
-df$Applications<-df$Previous_Applications
+        df$Applications<-df$Previous_Applications
 
 #k is defined according to the following rule:
 # k=0 if finishes==0
@@ -166,7 +130,7 @@ df$Applications<-df$Previous_Applications
 #k=1 if finishes==2
 #k=1.5 if finishes==3
 #k=1 if finishes>=4
-df$k <- ifelse(df$Previous_Finishes==0 , 0,
+        df$k <- ifelse(df$Previous_Finishes==0 , 0,
                ifelse(df$Previous_Finishes==1,  0.5,
                       ifelse(df$Previous_Finishes==2, 1, 
                              ifelse(df$Previous_Finishes==3, 1.5,
@@ -174,19 +138,19 @@ df$k <- ifelse(df$Previous_Finishes==0 , 0,
 
 
 #Shifts max out at 30 (10 each race)
-df$v<-pmin(df$Volunteer_Shifts, 30)
-df$t<-pmin(df$Extra_Trailwork, 10)
+      df$v<-pmin(df$Volunteer_Shifts, 30)
+      df$t<-pmin(df$Extra_Trailwork, 10)
 
 #Tickets=2^(n+k+1)+2ln(v+t+1) where n, k, v, and t are defined as follows:
-df$tickets <-2^(df$k+df$Applications+1) + 2*log(df$v+df$t+1)
+    df$tickets <-2^(df$k+df$Applications+1) + 2*log(df$v+df$t+1)
 
 ##########################################################
 
 
 
-#SPLIT THE DATA INTO MENS AND WOMENS
-men<-df[which(df$Gender=="M"),]
-women<-df[which(df$Gender=="F"),]
+   #SPLIT THE DATA INTO MENS AND WOMENS
+   men<-df[which(df$Gender=="M"),]
+   women<-df[which(df$Gender=="F"),]
 
 
 ##############################################################
@@ -243,20 +207,13 @@ women<-df[which(df$Gender=="F"),]
   #ASSUME MEN WILL HAVE ENOUGH FOR A FULL WAITLIST
   men_waiters <- sample_n(men_waitlist_pool, n_men_wait_pick, replace = FALSE, weight=men_waitlist_pool$tickets)
       
-#I can't figure out how to label tables, so just make the table itself
-  #look sort of well-labeled
-  #subset
-  #dfnew5 <- subset(diamonds, select=c("color", "carat", "price"))
   m_output_wait<-subset(men_waiters, select=c("fullname", "City", "State"))
-  #m_output_wait_priv<-subset(men_waiters, select=c("fullname", "Email_Address"))
-  #Add ID column data$ID <- seq.int(nrow(data))
+
   m_output_wait$Num<-seq.int(nrow(m_output_wait))
-  #rearrange columns df2[,c(1,3,2,4)
-  #m_output_wait<-m_output_wait[,c(5,1,2,3,4)]
-  #rename: names(data)[3]<-"new_name"
+ 
   names(m_output_wait)[1]<-"Waitlisted_Men"
   #Send the winners' names to be output
-    output$men_wait <- renderTable(m_output_wait)   
+  output$men_wait <- renderTable(m_output_wait)   
   
       
   ##########################################
@@ -268,26 +225,20 @@ women<-df[which(df$Gender=="F"),]
   #bind women first for the waitlist for 2021
   
   temp <- bind_rows(w_output_wait, m_output_wait)
+  output$women <- renderTable(w_output)
+  output$men <- renderTable(m_output)
+  output$combo<-renderTable(temp)      
+  } # CLOSE IF
+  }) #CLOSE REACTIVE
   
-  #sort and relabel
-  #temp <- arrange(temp, Num)
-  #temp$GenderNum <-temp$Num
-  #temp$Num <-seq.int(nrow(temp))
-  
- ##################
- #ALL THE SHINY OUTPUT IS AT THE END
-
-#Send the winners' names to be output
-    if (input$num==input$num2){ #PUT ALL INSIDE THIS SO IT WON'T RUN UNTIL MET
-    output$women <- renderTable(w_output)
-    output$men <- renderTable(m_output)
-     output$combo<-renderTable(temp)
-    }
-     
-})
-},
- options = list(height = 900)
+    #HAVE THE RENDER PRINT RUN BY ITSELF  
+    output$value <- renderPrint({
+      winners()
+    }) #END RENDER PRINT
+  }, #CLOSE SERVER
+ options = list(height = 900) 
 )
+
 
 #TRY THE DOWNLOAD
 output$report <- downloadHandler(
@@ -315,5 +266,6 @@ output$report <- downloadHandler(
 
 
 
-```
 
+
+```
