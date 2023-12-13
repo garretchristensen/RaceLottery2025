@@ -75,12 +75,18 @@ shinyApp(
                                fluidRow(
                                column(6, "These are the women selected in the lottery:", 
                                dataTableOutput("valueW"),
+                               downloadButton("downloadW", "Download Women"),
+                               HTML("<hr>"),
                                "These are the waitlisted women:",
-                               dataTableOutput("valueWLW")),
+                               dataTableOutput("valueWLW"),
+                               downloadButton("downloadWLW", "Download WL Women")),
                                column(6, "These are the men selected in the lottery:", 
                                dataTableOutput("valueM"),
+                               downloadButton("downloadM", "Download Men"),
+                               HTML("<hr>"),
                                "These are the waitlisted men:",
-                               dataTableOutput("valueWLM")),
+                               dataTableOutput("valueWLM"),
+                               downloadButton("downloadWLM", "Download WL Men"),),
                                ),
                                style="success")
                
@@ -88,7 +94,7 @@ shinyApp(
               
                
     ), #bsCollapse
-    downloadButton("report", "Download Results")
+    
   ), #fluidPage
   
   server<- function(input, output) {
@@ -132,6 +138,13 @@ shinyApp(
     output$valueW <- renderDataTable({
       w_winners()
     }) #END RENDER PRINT
+    output$downloadW <-downloadHandler(
+      filename = function(){"WomenWinners.csv"}, 
+         content = function(fname){
+         write.csv(w_winners(), fname)
+         }
+    )
+    
     
     #MEN WINNERS, REACTIVE, THEN RENDER
     m_winners <- reactive({
@@ -152,6 +165,12 @@ shinyApp(
     output$valueM <- renderDataTable({
       m_winners()
     }) #END RENDER PRINT
+    output$downloadM <-downloadHandler(
+      filename = function(){"MenWinners.csv"}, 
+      content = function(fname){
+        write.csv(m_winners(), fname)
+      }
+    )
     
   #WAITLIST
     waitlistW <- reactive({
@@ -174,6 +193,12 @@ shinyApp(
     output$valueWLW <- renderDataTable({
     waitlistW()
     }) #END RENDER PRINT
+    output$downloadWLW <-downloadHandler(
+      filename = function(){"WomenWaitlist.csv"}, 
+      content = function(fname){
+        write.csv(waitlistW(), fname)
+      }
+    )
       
     waitlistM <- reactive({
       req(input$num, input$num2)
@@ -195,7 +220,12 @@ shinyApp(
     output$valueWLM <- renderDataTable({
       waitlistM()
     }) #END RENDER PRINT
-    
+    output$downloadWLM <-downloadHandler(
+      filename = function(){"MenWaitlist.csv"}, 
+      content = function(fname){
+        write.csv(waitlistM(), fname)
+      }
+    )
     
   }, #CLOSE SERVER
   options = list(height = 900) 
