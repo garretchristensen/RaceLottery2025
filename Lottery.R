@@ -74,20 +74,21 @@ shinyApp(
                bsCollapsePanel("Results",
                                fluidRow(
                                column(6, "These are the women selected in the lottery:", 
-                               verbatimTextOutput("valueW"),
+                               dataTableOutput("valueW"),
                                "These are the waitlisted women:",
-                               verbatimTextOutput("valueWLW")),
+                               dataTableOutput("valueWLW")),
                                column(6, "These are the men selected in the lottery:", 
-                               verbatimTextOutput("valueM"),
+                               dataTableOutput("valueM"),
                                "These are the waitlisted men:",
-                               verbatimTextOutput("valueWLM")),
+                               dataTableOutput("valueWLM")),
                                ),
                                style="success")
                
                
               
                
-    ) #bsCollapse
+    ), #bsCollapse
+    downloadButton("report", "Download Results")
   ), #fluidPage
   
   server<- function(input, output) {
@@ -128,7 +129,7 @@ shinyApp(
           as.data.frame(w_output)
       } # CLOSE IF
     }) #CLOSE REACTIVE
-    output$valueW <- renderPrint({
+    output$valueW <- renderDataTable({
       w_winners()
     }) #END RENDER PRINT
     
@@ -148,7 +149,7 @@ shinyApp(
         as.data.frame(m_output)
       } # CLOSE IF
     }) #CLOSE REACTIVE
-    output$valueM <- renderPrint({
+    output$valueM <- renderDataTable({
       m_winners()
     }) #END RENDER PRINT
     
@@ -170,7 +171,7 @@ shinyApp(
         as.data.frame(w_output_wait)
       } # CLOSE IF
     }) #CLOSE REACTIVE
-    output$valueWLW <- renderPrint({
+    output$valueWLW <- renderDataTable({
     waitlistW()
     }) #END RENDER PRINT
       
@@ -191,7 +192,7 @@ shinyApp(
         as.data.frame(m_output_wait)
       } # CLOSE IF
     }) #CLOSE REACTIVE
-    output$valueWLM <- renderPrint({
+    output$valueWLM <- renderDataTable({
       waitlistM()
     }) #END RENDER PRINT
     
