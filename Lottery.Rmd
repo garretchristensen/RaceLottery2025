@@ -35,34 +35,30 @@ n_women_app=nrow(women<-df[which(df$Gender=="F"),])
 ```
 
 ```{r main, echo=FALSE, results=TRUE, warning=FALSE, message=FALSE}
-
-women <- data.frame( id = c(1, 2, 3, 4), firstname = c("Joan", "Robin",  "Anne", "Mary"), lastname = c("Jett", "Reynolds", "Adams", "Martin")) 
-
 shinyApp(
   ui<-fluidPage(
     
     
     
-bsCollapse(id = "collapse", open = "Lottery Background",
-  bsCollapsePanel("Lottery Background", "",
-                   "",
-                   fluidRow(htmltools::includeMarkdown("./markdown/background.md")), style = "info"),
-  bsCollapsePanel("What are my odds?", "",
-                   "",  fluidRow(
+bsCollapse(id = "collapse", multiple=TRUE,
+  bsCollapsePanel("Lottery Background",
+                   htmltools::includeMarkdown("./markdown/background.md"), style = "info"),
+  bsCollapsePanel("What are my odds?",
                   htmltools::includeMarkdown("./markdown/justtellmetheodds.md"),
-  column(6, sliderInput("apps", label = h5("Previous applications"), min=0, max=5, value = 0)),
-  column(6, sliderInput("finishes", label = h5("Previous Finishes"), min=0, max=5, value = 0)),
-  column(6, sliderInput("volunteer", label = h5("Volunteer Shifts"), min=0, max=30, value = 0)),
-  column(6, sliderInput("trailwork", label = h5("Extra Trailwork"), min=0, max=10, value = 0)),
-  fluidRow("Your tickets in the lottery:", textOutput("tickets"))
-  ), style = "success"),
+                  column(6, sliderInput("apps", label = h5("Previous applications"), min=0, max=5, value = 0)),
+                  column(6, sliderInput("finishes", label = h5("Previous Finishes"), min=0, max=5, value = 0)),
+                  column(6, sliderInput("volunteer", label = h5("Volunteer Shifts"), min=0, max=30, value = 0)),
+                  column(6, sliderInput("trailwork", label = h5("Extra Trailwork"), min=0, max=10, value = 0)),
+                 "Your tickets in the lottery:", textOutput("tickets"),
+                  style = "success"
+  ),
   
   bsCollapsePanel("Set the Seed", 
-  fluidRow(
-  htmltools::includeMarkdown("./markdown/implementingthelottery.md"),  
-  column(6, numericInput("num", label = h1("Enter the seed"), value = NA)),
-  column(6, numericInput("num2", label = h1("Confirm the seed"), value = NA))
-  ),style="info" )
+    htmltools::includeMarkdown("./markdown/implementingthelottery.md"),  
+    column(6, numericInput("num", label = h1("Enter the seed"), value = NA)),
+    column(6, numericInput("num2", label = h1("Confirm the seed"), value = NA)),
+    style="info" 
+  )
 ),    
   
  
