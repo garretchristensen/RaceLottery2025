@@ -36,6 +36,8 @@ df$tickets <-2^(df$k+df$Applications+1) + 2*log(df$v+df$t+1)
 
 #NUMBER OF MEN AND WOMEN APPLICANTS AND PICKS
 n_women_app=nrow(women<-df[which(df$Gender=="F"),])
+women<-df[which(df$Gender=="F"),]
+men<-df[which(df$Gender=="M"),]
 n_women_pick <- 68
 n_men_pick <- 75
 n_women_wait_pick<-75
@@ -115,8 +117,6 @@ shinyApp(
       req(input$num, input$num2)
       if (input$num == input$num2) {
           set.seed(input$num) #SET THE SEED WITH DICE
-          #SPLIT THE DATA INTO MENS AND WOMENS
-          women<-df[which(df$Gender=="F"),]
           #DRAW THE WOMEN
           women_winners<-sample_n(women, n_women_pick, replace = FALSE, weight=women$tickets)
           w_output<-subset(women_winners, select=c("fullname", "City", "State"))
@@ -137,8 +137,6 @@ shinyApp(
       req(input$num, input$num2)
       if (input$num == input$num2) {
         set.seed(input$num) #SET THE SEED WITH DICE!
-        #SPLIT THE DATA INTO MENS AND WOMENS
-        men<-df[which(df$Gender=="M"),]
         #DRAW THE MEN
         men_winners<-sample_n(men, n_men_pick, replace = FALSE, weight=men$tickets)
         m_output<-subset(men_winners, select=c("fullname", "City", "State"))
