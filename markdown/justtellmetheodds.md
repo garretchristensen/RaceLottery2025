@@ -1,2 +1,2 @@
-# What are my odds?
-To find your odds, first enter your previous applications, previous finishes, volunteer shifts, and extra trailwork. (The raw numbers--not any transformations.) We'll calculate your tickets. Then click [here](https://github.com/garretchristensen/RaceLottery2023/blob/main/odds.txt), and find the row for your tickets for the appropriate gender. (Sorry the pagination is not great!)
+## What are my odds?
+To find your odds, enter your previous applications, previous finishes, etc. in the section above to calculate your tickets. Then look for that number of tickets in your gender below. The table shows your likelihood of selection, the number of applicants with that number of tickets, and the likely number of people to be selected with that number of tickets.
