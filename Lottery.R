@@ -162,6 +162,7 @@ odds_of_selection <- tickets_taken / original_tickets
 #people from that category
 num_people_taken <- odds_of_selection * applicants
 w_odds <- cbind(tickets_per_applicant, odds_of_selection, applicants, num_people_taken)
+format(w_odds, nsmall=2)
 
 # MEN ODDS
 #the number of men with a given number of tickets
@@ -216,9 +217,9 @@ shinyApp(
                bsCollapsePanel("What are my odds?",
                         htmltools::includeMarkdown("./markdown/justtellmetheodds.md"),                 
                         "These are the odds for women with the given number of tickets:",
-                        dataTableOutput("oddsW"),
+                        DT::dataTableOutput("oddsW"),
                         "These are the odds for men with the given number of tickets:",
-                        dataTableOutput("oddsM"),
+                        DT::dataTableOutput("oddsM"),
                         style = "info"
                 ),
                bsCollapsePanel("Set the Seed", 
@@ -278,13 +279,14 @@ shinyApp(
     }) #END RENDER TEXT
     
     #ODDS
-    output$oddsW <- renderDataTable({
-      w_odds
+    output$oddsW <- DT::renderDataTable({
+      datatable(w_odds) %>% formatPercentage(c("odds_of_selection"), digits=2) %>% formatRound(c("tickets_per_applicant", "num_people_taken"), digits=3)
     })
-    output$oddsM <- renderDataTable({
-      m_odds
+    output$oddsM <- DT::renderDataTable({
+      datatable(m_odds) %>% formatPercentage(c("odds_of_selection"), digits=2) %>% formatRound(c("tickets_per_applicant", "num_people_taken"), digits=3)
     })
-    
+
+        
     #WOMEN WINNERS, REACTIVE, THEN RENDER
     w_winners <- reactive({
       req(input$num, input$num2)
