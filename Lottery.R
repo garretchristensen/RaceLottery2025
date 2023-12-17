@@ -229,25 +229,27 @@ shinyApp(
                                style="success" 
                ),
                
-               bsCollapsePanel("Results",
+               bsCollapsePanel("Results: Winners",
                                fluidRow(
                                column(6, "These are the women selected in the lottery:", 
                                DT::dataTableOutput("valueW"),
-                               downloadButton("downloadW", "Download Women"),
-                               HTML("<hr>"),
-                               "These are the waitlisted women:",
-                               dataTableOutput("valueWLW"),
-                               downloadButton("downloadWLW", "Download WL Women")),
+                               downloadButton("downloadW", "Download Women")),
                                column(6, "These are the men selected in the lottery:", 
                                DT::dataTableOutput("valueM"),
-                               downloadButton("downloadM", "Download Men"),
-                               HTML("<hr>"),
-                               "These are the waitlisted men:",
-                               dataTableOutput("valueWLM"),
-                               downloadButton("downloadWLM", "Download WL Men"),),
+                               downloadButton("downloadM", "Download Men")),
+                              ),
+                               style="info"),
+               bsCollapsePanel("Results: Waitlist",
+                               fluidRow(
+                                 column(6,"These are the waitlisted women:",
+                                        dataTableOutput("valueWLW"),
+                                        downloadButton("downloadWLW", "Download WL Women")),
+                                 column(6, "These are the waitlisted men:",
+                                        dataTableOutput("valueWLM"),
+                                        downloadButton("downloadWLM", "Download WL Men"),),
                                ),
-                               style="info")
-               
+                               style="success"
+                               )
                
               
                
