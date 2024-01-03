@@ -7,7 +7,7 @@ library(shiny)
 library(shinyBS)
 library(DT)
 
-temp<-read.csv("./2024 HiLo lottery data_FINALnoemail.csv", stringsAsFactors = FALSE) #LOAD THE DATA
+temp<-read.csv("./2024 HiLo lottery data_PRELIMnoemail.csv", stringsAsFactors = FALSE) #LOAD THE DATA
 df<-as_tibble(temp)
 
 df$fullname<-paste(df$First_Name, df$Last_Name, sep=" ", collapse = NULL)
@@ -39,67 +39,12 @@ df$tickets <-2^(df$k+df$Applications+1) + 2*log(df$v+df$t+1)
 n_women_app=nrow(women<-df[which(df$Gender=="F"),])
 women<-df[which(df$Gender=="F"),]
 men<-df[which(df$Gender=="M"),]
-n_women_pick <- 68
-n_men_pick <- 75
+n_women_pick <- 85
+n_men_pick <- 77
 n_women_wait_pick<-75
 n_men_wait_pick<-75
 
-# WOMEN ODDS
-#the number of women with a given number of tickets
-applicants <- pull((women %>% count(tickets))[,2], n)
-
-#those ticket numbers
-tickets_per_applicant <- sort(women$tickets[!duplicated(women$tickets)])
-
-#the total tickets from that 'category'
-original_tickets <- applicants * tickets_per_applicant
-ticket_counts <- original_tickets
-
-for (i in 1:n_women_pick) {
-  #odds of picking that category
-  prob_of_selecting_category <- ticket_counts / sum(ticket_counts)
-  #expected reduction in tickets by picking a person from that category
-  exp_ticket_reduction <- prob_of_selecting_category * tickets_per_applicant
-  #reduce the tickets remaining
-  ticket_counts <- ticket_counts - exp_ticket_reduction
-}
-#tickets pulled from a category
-tickets_taken <- original_tickets - ticket_counts
-#odds from that category
-odds_of_selection <- tickets_taken / original_tickets
-#people from that category
-num_people_taken <- odds_of_selection * applicants
-w_odds <- cbind(tickets_per_applicant, odds_of_selection, applicants, num_people_taken)
-
-# MEN ODDS
-#the number of men with a given number of tickets
-applicants <- pull((men %>% count(tickets))[,2], n)
-
-#those ticket numbers
-tickets_per_applicant <- sort(men$tickets[!duplicated(men$tickets)])
-
-#the total tickets from that 'category'
-original_tickets <- applicants * tickets_per_applicant
-ticket_counts <- original_tickets
-
-for (i in 1:n_men_pick) {
-  #odds of picking that category
-  prob_of_selecting_category <- ticket_counts / sum(ticket_counts)
-  #expected reduction in tickets by picking a person from that category
-  exp_ticket_reduction <- prob_of_selecting_category * tickets_per_applicant
-  #reduce the tickets remaining
-  ticket_counts <- ticket_counts - exp_ticket_reduction
-}
-#tickets pulled from a category
-tickets_taken <- original_tickets - ticket_counts
-#odds from that category
-odds_of_selection <- tickets_taken / original_tickets
-#people from that category
-num_people_taken <- odds_of_selection * applicants
-m_odds <- cbind(tickets_per_applicant, odds_of_selection, applicants, num_people_taken)
-
-women<-as.data.frame(women)
-men<-temp<-read.csv("./2024 HiLo lottery data_FINALnoemail.csv", stringsAsFactors = FALSE) #LOAD THE DATA
+men<-temp<-read.csv("./2024 HiLo lottery data_PRELIMnoemail.csv", stringsAsFactors = FALSE) #LOAD THE DATA
 df<-as_tibble(temp)
 
 df$fullname<-paste(df$First_Name, df$Last_Name, sep=" ", collapse = NULL)
@@ -131,10 +76,6 @@ df$tickets <-2^(df$k+df$Applications+1) + 2*log(df$v+df$t+1)
 n_women_app=nrow(women<-df[which(df$Gender=="F"),])
 women<-df[which(df$Gender=="F"),]
 men<-df[which(df$Gender=="M"),]
-n_women_pick <- 68
-n_men_pick <- 75
-n_women_wait_pick<-75
-n_men_wait_pick<-75
 
 # WOMEN ODDS
 #the number of women with a given number of tickets
