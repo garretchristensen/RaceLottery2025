@@ -1,7 +1,7 @@
 # High Lonesome 2024 Lottery
 An interactive, transparent, and reproducible design for the 2024 High Lonesome 100 lottery. Code by Garret Christensen, volunteering in exchange for whiskey. Thanks to Caleb for a great race and wanting to do things transparently. If any other RDs are interested in running their lotteries transparently, I'd love to talk!
 
-The lottery is implemented via R Shiny apps [here](https://garretchristensen.shinyapps.io/Lottery2024/).
+The lottery is implemented via R Shiny apps [here](https://garretchristensen.shinyapps.io/RaceLottery2024/).
 
 The code for it is all in this repository that you're looking at.
 Note that if you clone this repo, you can run the code on your own machine and get the same results, you may just have to change the data file name since I'm sharing a version here with no e-mail addresses.
