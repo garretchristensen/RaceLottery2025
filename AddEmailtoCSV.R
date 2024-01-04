@@ -3,13 +3,13 @@
 #RUN THIS CODE AFTER THE SEED IS KNOWN
 
 
-set.seed(-123456789) #PUT IN THE REAL SEED!
+set.seed(2) #PUT IN THE REAL SEED!
 
 
 library(dplyr)
 library(tibble)
 library(readxl)
-temp<-read.csv("./2023 HiLo lottery data_FINAL.csv", stringsAsFactors = FALSE) #LOAD THE DATA
+temp<-read.csv("./2024 HiLo lottery data_PRELIMnoemail.csv", stringsAsFactors = FALSE) #LOAD THE DATA
 df<-as_tibble(temp)
 
 df$fullname<-paste(df$First_Name, df$Last_Name, sep=" ", collapse = NULL)
@@ -18,8 +18,8 @@ n_men_app=nrow(men<-df[which(df$Gender=="M"),])
 n_women_app=nrow(women<-df[which(df$Gender=="F"),])
 
 
-n_women_pick <- 68
-n_men_pick <- 63
+n_women_pick <- 85
+n_men_pick <- 77
 
 
 df$Applications<-df$Previous_Applications
