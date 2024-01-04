@@ -36,16 +36,13 @@ df$t<-pmin(df$Extra_Trailwork, 10)
 df$tickets <-2^(df$k+df$Applications+1) + 2*log(df$v+df$t+1)
 
 #NUMBER OF MEN AND WOMEN APPLICANTS AND PICKS
-n_women_app=nrow(women<-df[which(df$Gender=="F"),])
-women<-df[which(df$Gender=="F"),]
-men<-df[which(df$Gender=="M"),]
+n_women_app=nrow(women<-df[which(df$Gender=="Female"),])
+women<-df[which(df$Gender=="Female"),]
+men<-df[which(df$Gender=="Male"),]
 n_women_pick <- 85
 n_men_pick <- 77
 n_women_wait_pick<-75
 n_men_wait_pick<-75
-
-men<-temp<-read.csv("./2024 HiLo lottery data_PRELIMnoemail.csv", stringsAsFactors = FALSE) #LOAD THE DATA
-df<-as_tibble(temp)
 
 df$fullname<-paste(df$First_Name, df$Last_Name, sep=" ", collapse = NULL)
 head(df)
@@ -71,11 +68,6 @@ df$t<-pmin(df$Extra_Trailwork, 10)
 
 #Tickets=2^(n+k+1)+2ln(v+t+1) where n, k, v, and t are defined as follows:
 df$tickets <-2^(df$k+df$Applications+1) + 2*log(df$v+df$t+1)
-
-#NUMBER OF MEN AND WOMEN APPLICANTS AND PICKS
-n_women_app=nrow(women<-df[which(df$Gender=="F"),])
-women<-df[which(df$Gender=="F"),]
-men<-df[which(df$Gender=="M"),]
 
 # WOMEN ODDS
 #the number of women with a given number of tickets
