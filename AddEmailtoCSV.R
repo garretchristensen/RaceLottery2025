@@ -1,21 +1,18 @@
 #rm(list=ls(all=TRUE))
 
 #RUN THIS CODE AFTER THE SEED IS KNOWN
-
-
-set.seed(2) #PUT IN THE REAL SEED!
-
+SEED<-42 #PUT IN THE REAL SEED!
 
 library(dplyr)
 library(tibble)
 library(readxl)
-temp<-read.csv("./2024 HiLo lottery data_PRELIMnoemail.csv", stringsAsFactors = FALSE) #LOAD THE DATA
+temp<-read.csv("./2024 HiLo lottery data_PRELIMwithemail.csv", stringsAsFactors = FALSE) #LOAD THE DATA
 df<-as_tibble(temp)
 
 df$fullname<-paste(df$First_Name, df$Last_Name, sep=" ", collapse = NULL)
 head(df)
-n_men_app=nrow(men<-df[which(df$Gender=="M"),])
-n_women_app=nrow(women<-df[which(df$Gender=="F"),])
+n_men_app=nrow(men<-df[which(df$Gender=="Male"),])
+n_women_app=nrow(women<-df[which(df$Gender=="Female"),])
 
 
 n_women_pick <- 85
@@ -39,79 +36,79 @@ df$t<-pmin(df$Extra_Trailwork, 10)
 df$tickets <-2^(df$k+df$Applications+1) + 2*log(df$n+df$t+1)
 
 #SPLIT THE DATA INTO MENS AND WOMENS
-men<-df[which(df$Gender=="M"),]
-women<-df[which(df$Gender=="F"),]
+men<-df[which(df$Gender=="Male"),]
+women<-df[which(df$Gender=="Female"),]
 
 ####################################################
 
-#PRINT THE ODDS
-# WOMEN ODDS
-#the number of women with a given number of tickets
-applicants <- pull((women %>% count(tickets))[,2], n)
-
-#those ticket numbers
-tickets_per_applicant <- sort(women$tickets[!duplicated(women$tickets)])
-
-#the total tickets from that 'category'
-original_tickets <- applicants * tickets_per_applicant
-ticket_counts <- original_tickets
-
-for (i in 1:n_women_pick) {
-  #odds of picking that category
-  prob_of_selecting_category <- ticket_counts / sum(ticket_counts)
-  #expected reduction in tickets by picking a person from that category
-  exp_ticket_reduction <- prob_of_selecting_category * tickets_per_applicant
-  #reduce the tickets remaining
-  ticket_counts <- ticket_counts - exp_ticket_reduction
-}
-#tickets pulled from a category
-tickets_taken <- original_tickets - ticket_counts
-#odds from that category
-odds_of_selection <- tickets_taken / original_tickets
-#people from that category
-num_people_taken <- odds_of_selection * applicants
-w_odds <- cbind(tickets_per_applicant, odds_of_selection, applicants, num_people_taken)
-w_odds
-############################
-# MEN ODDS
-#the number of men with a given number of tickets
-applicants <- pull((men %>% count(tickets))[,2], n)
-
-#those ticket numbers
-tickets_per_applicant <- sort(men$tickets[!duplicated(men$tickets)])
-
-#the total tickets from that 'category'
-original_tickets <- applicants * tickets_per_applicant
-ticket_counts <- original_tickets
-
-for (i in 1:n_men_pick) {
-  #odds of picking that category
-  prob_of_selecting_category <- ticket_counts / sum(ticket_counts)
-  #expected reduction in tickets by picking a person from that category
-  exp_ticket_reduction <- prob_of_selecting_category * tickets_per_applicant
-  #reduce the tickets remaining
-  ticket_counts <- ticket_counts - exp_ticket_reduction
-}
-#tickets pulled from a category
-tickets_taken <- original_tickets - ticket_counts
-#odds from that category
-odds_of_selection <- tickets_taken / original_tickets
-#people from that category
-num_people_taken <- odds_of_selection * applicants
-m_odds <- cbind(tickets_per_applicant, odds_of_selection, applicants, num_people_taken)
-m_odds
-
-#PRINT A CSV OF THE ODDS
-men_blurb<-"This is the mens odds. Find your number of tickets to find the odds. \n The columns are your tickets (points), the odds of a man with that number of tickets getting in, the number of men with that exact tickets/point-score to apply, and the expected number of men with those tickets to get in. \n \n"
-women_blurb<-"\n This is the womens odds. Find your number of tickets to find the odds. \n The columns are your tickets (points), the odds of a woman with that number of tickets getting in, the number of women with that exact tickets/point-score to apply, and the expected number of women with those tickets to get in. \n \n"
-sink("odds.txt")
-cat(men_blurb)
-round(m_odds, digits = 4)
-cat(women_blurb)
-round(w_odds, digits = 4)
-sink()
-
-
+# #2024 DONT BOTHER PRINTING THE OFFLINE ODDS
+# # WOMEN ODDS
+# #the number of women with a given number of tickets
+# applicants <- pull((women %>% count(tickets))[,2], n)
+# 
+# #those ticket numbers
+# tickets_per_applicant <- sort(women$tickets[!duplicated(women$tickets)])
+# 
+# #the total tickets from that 'category'
+# original_tickets <- applicants * tickets_per_applicant
+# ticket_counts <- original_tickets
+# 
+# for (i in 1:n_women_pick) {
+#   #odds of picking that category
+#   prob_of_selecting_category <- ticket_counts / sum(ticket_counts)
+#   #expected reduction in tickets by picking a person from that category
+#   exp_ticket_reduction <- prob_of_selecting_category * tickets_per_applicant
+#   #reduce the tickets remaining
+#   ticket_counts <- ticket_counts - exp_ticket_reduction
+# }
+# #tickets pulled from a category
+# tickets_taken <- original_tickets - ticket_counts
+# #odds from that category
+# odds_of_selection <- tickets_taken / original_tickets
+# #people from that category
+# num_people_taken <- odds_of_selection * applicants
+# w_odds <- cbind(tickets_per_applicant, odds_of_selection, applicants, num_people_taken)
+# w_odds
+# ############################
+# # MEN ODDS
+# #the number of men with a given number of tickets
+# applicants <- pull((men %>% count(tickets))[,2], n)
+# 
+# #those ticket numbers
+# tickets_per_applicant <- sort(men$tickets[!duplicated(men$tickets)])
+# 
+# #the total tickets from that 'category'
+# original_tickets <- applicants * tickets_per_applicant
+# ticket_counts <- original_tickets
+# 
+# for (i in 1:n_men_pick) {
+#   #odds of picking that category
+#   prob_of_selecting_category <- ticket_counts / sum(ticket_counts)
+#   #expected reduction in tickets by picking a person from that category
+#   exp_ticket_reduction <- prob_of_selecting_category * tickets_per_applicant
+#   #reduce the tickets remaining
+#   ticket_counts <- ticket_counts - exp_ticket_reduction
+# }
+# #tickets pulled from a category
+# tickets_taken <- original_tickets - ticket_counts
+# #odds from that category
+# odds_of_selection <- tickets_taken / original_tickets
+# #people from that category
+# num_people_taken <- odds_of_selection * applicants
+# m_odds <- cbind(tickets_per_applicant, odds_of_selection, applicants, num_people_taken)
+# m_odds
+# 
+# #PRINT A CSV OF THE ODDS
+# men_blurb<-"This is the mens odds. Find your number of tickets to find the odds. \n The columns are your tickets (points), the odds of a man with that number of tickets getting in, the number of men with that exact tickets/point-score to apply, and the expected number of men with those tickets to get in. \n \n"
+# women_blurb<-"\n This is the womens odds. Find your number of tickets to find the odds. \n The columns are your tickets (points), the odds of a woman with that number of tickets getting in, the number of women with that exact tickets/point-score to apply, and the expected number of women with those tickets to get in. \n \n"
+# sink("odds.txt")
+# cat(men_blurb)
+# round(m_odds, digits = 4)
+# cat(women_blurb)
+# round(w_odds, digits = 4)
+# sink()
+# 
+# 
 
 ##############################################################
 #DRAW THE LOTTERY
@@ -119,7 +116,9 @@ sink()
 #dplyr function sample_n will work with weights, normalize automatically
 #syntax:sample_n(tbl, size, replace = FALSE, weight = NULL, .env = NULL, ...)
 #Run the separate lotteries
+set.seed(SEED) #PUT IN THE REAL SEED!
 women_winners<-sample_n(women, n_women_pick, replace = FALSE, weight=women$tickets)
+set.seed(SEED) #PUT IN THE REAL SEED!
 men_winners<-sample_n(men, n_men_pick, replace = FALSE, weight=men$tickets)
 
 
@@ -134,22 +133,28 @@ n_women_waitlist_pool<-nrow(women_waitlist_pool)
 men_waitlist_pool<-anti_join(men, men_winners)
 n_men_waitlist_pool<-nrow(men_waitlist_pool)
 
-#SIMPLER THIS YEAR, JUST ENTER THE NUMBERS FOR THE WL, 8 and 7
+#ENTER THE NUMBERS FOR THE WL, 8 and 7
 n_women_wait_pick<-75
 n_men_wait_pick<-75
 
 #PICK THE WAITLISTERS
-#WOMEN MIGHT NOT HAVE ANY
-
+set.seed(SEED) #RESTORE THE SEED!
+women_winnersProxy<-sample_n(women, n_women_pick, replace = FALSE, weight=women$tickets)
+women_waitlist_pool<-anti_join(women, women_winnersProxy)
+#PICK THE WAITLISTERS
 women_waiters <- sample_n(women_waitlist_pool, n_women_wait_pick, replace = FALSE, weight=women_waitlist_pool$tickets)
+
 w_output_wait<-subset(women_waiters, select=c("fullname"))
 w_output_wait_priv<-subset(women_waiters, select=c("fullname", "Email_Address"))
 w_output_wait$Num<-seq.int(nrow(w_output_wait))
-#w_output_wait<-w_output_wait[,c(5,1,2,3,4)]
 names(w_output_wait)[1]<-"Waitlisted_Women"
 
 
 #ASSUME MEN WILL HAVE ENOUGH FOR A FULL WAITLIST
+set.seed(SEED) #RESTORE THE SEED
+#REDO THE LOTTERIES (ARE THEY THE SAME?)
+men_winnersProxy<-sample_n(men, n_men_pick, replace = FALSE, weight=men$tickets)
+men_waitlist_pool<-anti_join(men, men_winnersProxy)
 men_waiters <- sample_n(men_waitlist_pool, n_men_wait_pick, replace = FALSE, weight=men_waitlist_pool$tickets)
 
 #I can't figure out how to label tables, so just make the table itself
@@ -188,8 +193,8 @@ temp <- bind_rows(w_output_wait, m_output_wait)
 #ADD EMAILS TO THE OUTPUT FOR CALEB ONLY
 ################################
 private_winners <- bind_rows(women_winners, men_winners)
-write.csv(private_winners, ".\\HL2023Winners.csv")
+write.csv(private_winners, ".\\HL2024Winners.csv")
 
 private_pools <-bind_rows(women_waiters, men_waiters)
 private_waiters <- left_join(temp, private_pools, by=c("Waitlisted_Name"="fullname"))
-write.csv(private_waiters, ".\\HL2023Waitlist.csv")
+write.csv(private_waiters, ".\\HL2024Waitlist.csv")
