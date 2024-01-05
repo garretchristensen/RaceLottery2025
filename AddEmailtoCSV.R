@@ -1,12 +1,12 @@
 #rm(list=ls(all=TRUE))
 
 #RUN THIS CODE AFTER THE SEED IS KNOWN
-SEED<-42 #PUT IN THE REAL SEED!
+SEED<-3 #PUT IN THE REAL SEED!
 
 library(dplyr)
 library(tibble)
 library(readxl)
-temp<-read.csv("./2024 HiLo lottery data_PRELIMwithemail.csv", stringsAsFactors = FALSE) #LOAD THE DATA
+temp<-read.csv("./2024 High Lonesome FINAL lottery data_noemail.csv", stringsAsFactors = FALSE) #LOAD THE DATA
 df<-as_tibble(temp)
 
 df$fullname<-paste(df$First_Name, df$Last_Name, sep=" ", collapse = NULL)
