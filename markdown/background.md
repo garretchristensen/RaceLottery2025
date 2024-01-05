@@ -1,6 +1,6 @@
 ## Lottery Design
 
-The 2024 lottery is picking 77 men, 85 women, a 75-men waitlist, and a 75-women waitlist from the 780 total applicants (206 women, 574 men). 
+The 2024 lottery is picking 77 men, 85 women, a 75-men waitlist, and a 75-women waitlist from the 773 total applicants (201 women, 572 men). 
 
 The general goals of the lottery are as follows:
 

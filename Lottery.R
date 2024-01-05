@@ -7,7 +7,7 @@ library(shiny)
 library(shinyBS)
 library(DT)
 
-temp<-read.csv("./2024 HiLo lottery data_PRELIMnoemail.csv", stringsAsFactors = FALSE) #LOAD THE DATA
+temp<-read.csv("./2024 High Lonesome FINAL lottery data_noemail.csv", stringsAsFactors = FALSE) #LOAD THE DATA
 df<-as_tibble(temp)
 
 df$fullname<-paste(df$First_Name, df$Last_Name, sep=" ", collapse = NULL)
