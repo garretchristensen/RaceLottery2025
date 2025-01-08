@@ -7,13 +7,18 @@ library(shiny)
 library(shinyBS)
 library(DT)
 
-temp<-read.csv("./2024 High Lonesome FINAL lottery data_noemail.csv", stringsAsFactors = FALSE) #LOAD THE DATA
+temp<-read.csv("./2025 High Lonesome 100 lottery data_provisional for garret.csv", stringsAsFactors = FALSE) #LOAD THE DATA
 df<-as_tibble(temp)
 
 df$fullname<-paste(df$First_Name, df$Last_Name, sep=" ", collapse = NULL)
 head(df)
 #DETERMINE TICKETS FROM THE DATA
 df$Applications<-df$Previous_Applications
+
+#2025 Caleb changed the name of the columns
+df$Gender<-ifelse(df$Lottery.Pool=="F", "Female", "Male")
+
+
 
 #k is defined according to the following rule:
 # k=0 if finishes==0
@@ -39,8 +44,8 @@ df$tickets <-2^(df$k+df$Applications+1) + 2*log(df$v+df$t+1)
 n_women_app=nrow(women<-df[which(df$Gender=="Female"),])
 women<-df[which(df$Gender=="Female"),]
 men<-df[which(df$Gender=="Male"),]
-n_women_pick <- 85
-n_men_pick <- 77
+n_women_pick <- 103
+n_men_pick <- 95
 n_women_wait_pick<-75
 n_men_wait_pick<-75
 

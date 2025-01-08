@@ -6,7 +6,7 @@ SEED<-327868443 #PUT IN THE REAL SEED!
 library(dplyr)
 library(tibble)
 library(readxl)
-temp<-read.csv("./2024 High Lonesome FINAL lottery data.csv", stringsAsFactors = FALSE) #LOAD THE DATA
+temp<-read.csv("./2025 High Lonesome 100 lottery data_provisional for garret.csv", stringsAsFactors = FALSE) #LOAD THE DATA
 df<-as_tibble(temp)
 
 df$fullname<-paste(df$First_Name, df$Last_Name, sep=" ", collapse = NULL)
